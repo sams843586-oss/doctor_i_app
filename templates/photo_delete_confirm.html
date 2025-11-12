@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Удалить фотографию</h2>
+  <p>Вы уверены, что хотите удалить фото ID {{ photo.id }}?</p>
+  <img class="thumb" src="{{ url_for('uploaded_file', patient_id=photo.patient_id, filename=photo.filename) }}" alt="photo {{ photo.id }}">
+  <form method="post" style="margin-top:12px;">
+    <button class="btn danger" type="submit">Удалить</button>
+    <a class="btn" href="{{ url_for('patient_detail', patient_id=photo.patient_id) }}">Отмена</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Пациент — {{ patient.full_name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Подключаем серо-белую тему -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="gray-theme">
+    <!-- Шапка в едином стиле -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="{{ url_for('index') }}" class="brand" aria-label="Главная">
+                <img src="{{ url_for('static', filename='Logo.svg') }}" alt="Логотип" class="logo">
+                <div class="title-wrap">
+                    <h1 class="page-title">Пациент</h1>
+                    <p class="subtitle">Профиль пациента и фотографии</p>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="list-section" style="padding: 0 0 12px;">
+            <div class="card" style="border-radius:16px; overflow:hidden; border: 1px solid var(--border); box-shadow: var(--shadow);">
+                <div style="padding:18px 20px;">
+                    <h2 style="margin:0 0 6px; font-size:1.2rem; color:var(--text);">
+                        👤 Пациент: <span style="font-weight:700;">{{ patient.full_name }}</span>
+                    </h2>
+                    <p style="margin:6px 0 0; color:var(--muted);">
+                        👩‍⚕️ <strong>Врач:</strong> {{ patient.doctor_full_name }}
+                    </p>
+                </div>
+
+                <!-- Контент: загрузка и превью -->
+                <div style="display:grid; grid-template-columns: 1fr 320px; gap:18px; padding: 16px 20px; align-items:start;">
+                    <!-- Левая колонка: форма загрузки и поля -->
+                    <div>
+                        <form method="POST" action="{{ url_for('patient_upload_photo', patient_id=patient.id) }}" enctype="multipart/form-data" class="form">
+                            <label for="photo" style="display:block; margin-bottom:8px; color:var(--text); font-weight:600;">📷 Фото пациента</label>
+
+                            <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px;">
+                                <input type="file" id="photo" name="photo" accept="image/*" style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--border); background:#fff;">
+                                <!-- Сохраняем твою кнопку 'button' -->
+                                <button type="submit" class="button" style="padding:10px 14px;">Загрузить фото</button>
+                            </div>
+
+                            <div style="margin-top:8px; color:var(--muted); font-size:0.95rem;">
+                                Поддерживаемые форматы: JPG, PNG. Максимум 10 МБ.
+                            </div>
+                        </form>
+
+                        <hr style="border:none; border-top:1px solid var(--border); margin:18px 0;">
+
+                        <!-- Дополнительная информация (опционально) -->
+                        <div style="color:var(--muted); font-size:0.95rem; line-height:1.5;">
+                            <p style="margin:0 0 8px;"><strong>Дата рождения:</strong> {{ patient.dob or '—' }}</p>
+                            <p style="margin:0 0 8px;"><strong>Возраст:</strong> {{ patient.age or '—' }}</p>
+                            <p style="margin:0;"><strong>Пол:</strong> {{ patient.gender or '—' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Правая колонка: превью фотографии -->
+                    <aside style="width:100%; max-width:320px; text-align:center;">
+                        <div style="background:linear-gradient(180deg,#fff,#fafafa); border-radius:12px; padding:14px; border:1px solid var(--border);">
+                            <div style="width:100%; height:220px; display:grid; place-items:center; overflow:hidden; border-radius:10px; background:#f6f8fa;">
+                                <img src="{{ patient.photo_url or url_for('static', filename='placeholder.jpg') }}" alt="Фото пациента" style="max-width:100%; max-height:100%; object-fit:cover; border-radius:8px;">
+                            </div>
+                            <p class="uploaded" style="margin:12px 0 0; color:var(--muted); font-size:0.95rem;">
+                                Загружено: {{ patient.photo_uploaded_at or '—' }}
+                            </p>
+                        </div>
+                    </aside>
+                </div>
+
+                <div style="padding:12px 20px; border-top:1px solid var(--border); background:linear-gradient(180deg,#fff,#fafafa);">
+                    <a href="{{ url_for('doctor_detail', doctor_id=patient.doctor_id) }}" class="back-link">← Назад к врачу</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <small>© {{ current_year if current_year else 2025 }} Program Developed by Mike for Doktor IЫ</small>
+        </div>
+    </footer>
+</body>
+</html>

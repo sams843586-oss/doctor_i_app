@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список врачей</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Внешний CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="gray-theme">
+    <!-- Шапка -->
+    <header class="header">
+        <div class="header-inner center">
+            <img src="{{ url_for('static', filename='Logo.svg') }}" alt="Логотип" class="logo">
+            <div class="title-wrap" style="text-align:center;">
+                <h1>Выберите врача</h1>
+                <p class="subtitle">Просмотрите профили и перейдите к подробной информации</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Контент -->
+    <main class="container center">
+        <section class="list-section" style="max-width:700px; width:100%;">
+            <ul class="list">
+                {% for doctor in doctors %}
+                    <li class="list-item">
+                        <a class="list-link" href="{{ url_for('doctor_detail', doctor_id=doctor.id) }}">
+                            <span class="name">{{ doctor.full_name }}</span>
+                            <span class="dash">—</span>
+                            <span class="spec">
+                                <span class="spec">🦷 {{ doctor.specialty }}</span>
+                                {% if "стоматолог" in doctor.specialty|lower %} 🦷{% endif %}
+                            </span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="list-item empty">Врачей пока нет</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <small>© {{ current_year if current_year else 2025 }} Program Developed by Mike for Doktor I</small>
+        </div>
+    </footer>
+</body>
+</html>

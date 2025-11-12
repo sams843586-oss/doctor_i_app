@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Новый пациент — {{ doctor.full_name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="gray-theme">
+    <!-- Шапка -->
+    <header class="header">
+        <div class="header-inner center">
+            <img src="{{ url_for('static', filename='Logo.svg') }}" alt="Логотип" class="logo">
+            <div class="title-wrap" style="text-align:center;">
+                <h1>Добавление пациента</h1>
+                <p class="subtitle">К врачу: {{ doctor.full_name }}</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Контент -->
+    <main class="container center">
+        <section class="list-section" style="max-width:600px; width:100%; margin-bottom:28px;">
+            <div style="padding:28px;">
+                <h2 style="margin:0 0 18px; font-size:1.2rem; text-align:center;">📝 Новая анкета пациента</h2>
+
+                <form method="POST" action="{{ url_for('patient_new', doctor_id=doctor.id) }}" class="form">
+                    <div class="form-row">
+                        <label for="first_name">Имя</label>
+                        <input type="text" id="first_name" name="first_name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="middle_name">Отчество</label>
+                        <input type="text" id="middle_name" name="middle_name">
+                    </div>
+
+                    <div class="form-row">
+                        <label for="last_name">Фамилия</label>
+                        <input type="text" id="last_name" name="last_name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="age">Возраст</label>
+                        <input type="number" id="age" name="age" required min="0">
+                    </div>
+
+                    <div class="form-row">
+                        <label for="gender">Пол</label>
+                        <select id="gender" name="gender" required>
+                            <option value="Мужской">Мужской</option>
+                            <option value="Женский">Женский</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row center" style="margin-top:24px;">
+                        <button type="submit" class="button">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <p style="text-align:center;">
+            <a href="{{ url_for('doctor_detail', doctor_id=doctor.id) }}" class="back-link">← Назад к врачу</a>
+        </p>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <small>© {{ current_year if current_year else 2025 }} Program Developed by Mike for Doktor I</small>
+        </div>
+    </footer>
+</body>
+</html>

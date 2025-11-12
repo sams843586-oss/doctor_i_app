@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ patient.full_name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="gray-theme">
+    <header class="header">
+        <div class="header-inner">
+            <img src="{{ url_for('static', filename='Logo.svg') }}" alt="Логотип" class="logo">
+            <div class="title-wrap">
+                <h1>Пациент: {{ patient.full_name }}</h1>
+                <p class="subtitle">Врач: {{ patient.doctor.full_name }}</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="list-section" style="margin-bottom:20px;">
+            <div style="padding:16px 20px;">
+                <h2 style="margin:0 0 8px; font-size:1.05rem; color:var(--text);">Фотографии</h2>
+                <p style="margin:0 0 12px; color:var(--muted);">Загрузите фото пациента — поддерживаем JPG и PNG.</p>
+
+                <form method="POST" action="{{ url_for('upload_photo', patient_id=patient.id) }}" enctype="multipart/form-data" class="form">
+                    <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                        <input type="file" name="photo" accept="image/*" required style="padding:10px; border-radius:10px; border:1px solid var(--border); background:#fff;">
+                        <button type="submit" class="button" style="padding:10px 14px;">Загрузить фото</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="list-section">
+            <div style="padding:14px 18px; border-bottom:1px solid var(--border);">
+                <strong style="color:var(--text);">Загруженные фотографии</strong>
+            </div>
+
+            <div class="photos" style="padding:16px 20px;">
+                {% if photos %}
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
+                    {% for photo in photos %}
+                        <div class="photo-item">
+                            <div class="thumb">
+                                <img src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Фото пациента" loading="lazy" class="photo-full">
+                            </div>
+                            <p class="uploaded">Загружено: {{ photo.uploaded_at.strftime("%d.%m.%Y %H:%M") }}</p>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <div style="padding:18px 20px; color:var(--muted);">Фотографий пока нет</div>
+                {% endif %}
+            </div>
+        </section>
+
+        <p style="margin:18px 2px;">
+            <a href="{{ url_for('doctor_detail', doctor_id=patient.doctor.id) }}" class="back-link">← Назад к врачу</a>
+        </p>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <small>© {{ current_year if current_year else 2025 }} Program Developed by Mike for Doktor I</small>
+        </div>
+    </footer>
+
+    <!-- Модальное превью при клике -->
+    <script>
+    document.addEventListener('click', function(e){
+      const img = e.target.closest('.photo-full');
+      if(!img) return;
+      const src = img.getAttribute('src');
+      const modal = document.createElement('div');
+      modal.style.position = 'fixed';
+      modal.style.inset = 0;
+      modal.style.background = 'rgba(0,0,0,0.75)';
+      modal.style.display = 'grid';
+      modal.style.placeItems = 'center';
+      modal.style.zIndex = 9999;
+      modal.innerHTML = '<img src="'+src+'" style="max-width:92%; max-height:92%; border-radius:8px;">';
+      modal.addEventListener('click', ()=> modal.remove());
+      document.body.appendChild(modal);
+    });
+    </script>
+</body>
+</html>

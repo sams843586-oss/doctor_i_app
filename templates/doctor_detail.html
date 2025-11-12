@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ doctor.full_name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Подключаем серо-белую тему из style.css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- (Необязательно) Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="gray-theme">
+    <!-- Шапка как на главной -->
+    <header class="header">
+        <div class="header-inner">
+            <img src="{{ url_for('static', filename='Logo.svg') }}" alt="Логотип" class="logo">
+            <div class="title-wrap">
+                <h1>{{ doctor.full_name }}</h1>
+                <p class="subtitle">Профиль специалиста и список пациентов</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Верхний блок действий (сохраняем твою ссылку-кнопку без добавления новых) -->
+        <section class="list-section" style="margin-bottom: 20px;">
+            <div class="list">
+                <div class="list-item" style="border-bottom: none;">
+                    <p style="margin: 0; padding: 16px 20px;">
+                        <a class="button" href="{{ url_for('patient_new', doctor_id=doctor.id) }}">➕ Новый пациент</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Список пациентов в тех же классах -->
+        <section class="list-section">
+            <div class="list-header" style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
+                <h2 style="margin: 0; font-size: 1.2rem; color: var(--text);">Пациенты</h2>
+            </div>
+
+            <ul class="list">
+                {% for patient in doctor.patients %}
+                    <li class="list-item">
+                        <a class="list-link" href="{{ url_for('patient_detail', patient_id=patient.id) }}">
+                            <span class="name">{{ patient.full_name }}</span>
+                            <span class="dash">—</span>
+                            <span class="spec">{{ patient.age }} лет, {{ patient.gender }}</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="list-item empty">
+                        Пациентов пока нет
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Назад к списку врачей (обычная ссылка) -->
+        <p style="margin: 18px 2px;">
+            <a href="{{ url_for('doctors_list') }}">← Назад к списку врачей</a>
+        </p>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <small>© {{ current_year if current_year else 2025 }} Program Developed by Mike for Doktor I</small>
+        </div>
+    </footer>
+</body>
+</html>

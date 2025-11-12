@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Доктор И — Фото пациентов</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #ffffff; /* белый фон */
+      color: #000;
+    }
+    .navbar {
+      background-color: #8ed1fc !important; /* голубой навбар */
+    }
+    .navbar-brand img {
+      height: 40px;
+      width: auto;
+      display: inline-block;
+    }
+    .btn-primary {
+      background-color: #8ed1fc;
+      border-color: #8ed1fc;
+      color: #000;
+    }
+    .btn-primary:hover {
+      background-color: #6ec7f7;
+      border-color: #6ec7f7;
+      color: #000;
+    }
+    .card {
+      background-color: #ffffff;
+      border: 1px solid #8ed1fc;
+    }
+    .card-title {
+      color: #000;
+    }
+    .alert {
+      border-left: 5px solid #8ed1fc;
+    }
+  </style>
+</head>
+<body>
+  <!-- Навигация -->
+  <nav class="navbar navbar-expand-lg shadow-sm">
+    <div class="container">
+      <!-- Логотип -->
+      <a class="navbar-brand" href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='logo.svg') }}" alt="Логотип">
+      </a>
+      <div>
+        <a class="btn btn-primary" href="{{ url_for('patient_new') }}">➕ Новый пациент</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Контент -->
+  <main class="container mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} mt-2">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
